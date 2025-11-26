@@ -10,8 +10,8 @@ export default async function handler(req, res) {
 
     try {
       await resend.emails.send({
-        from: 'contactform@mjbconsultora.com.ar', // debe ser un dominio verificado en Resend
-        to: 'info@mjbconsultora.com.ar', // el correo donde querés recibir los mensajes
+        from: 'contactform@mjbconsultora.com.ar', 
+        to: 'info@mjbconsultora.com.ar', 
         subject: `Nuevo mensaje de ${nombre}`,
         html: `
           <h2>Nuevo mensaje desde el formulario de contacto</h2>
