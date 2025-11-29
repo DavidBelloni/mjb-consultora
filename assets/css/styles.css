@@ -92,8 +92,8 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 10% 10%, #9ea3fd 0%, #3258ff00 60%),
-        radial-gradient(circle at 85% 75%, #a3a8ff 0%, #32e0ff00 60%),
+        radial-gradient(circle at 10% 10%, #9eaefd 0%, #3258ff00 30%),
+        radial-gradient(circle at 85% 75%, #a3b7ff 0%, #32e0ff00 20%),
         radial-gradient(circle at 50% 40%, #cbd4ff 0%, #e4ff3200 60%);
     filter: blur(150px); 
     opacity: 0.7;
@@ -406,13 +406,13 @@ img {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
-    padding: 20px 0;
+    padding: 20px 30px;
 }
 
 /* --- Efecto 3D Flip --- */
 .card-container {
     perspective: 1200px;
-    height: 280px;
+    height: 240px;
 }
 
 .card {
@@ -453,9 +453,9 @@ img {
 .card h3 {
     padding: 0 20px;
     margin-bottom: 10px;
-    color: #1a1a1a;
-    font-size: 18px;
-    font-weight: 600;
+    color: #000000;
+    font-size: 19px;
+    font-weight: 500;
 }
 
 .card-icon {
@@ -944,7 +944,7 @@ img {
     background-size: cover;
 }
 
-.contact-header h1 {
+.contact-header h2 {
     position: relative;
     z-index: 1; 
     margin: 0;
@@ -1362,6 +1362,17 @@ img {
         font-size: 17px;
     }
 
+    .cards-section h2 {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .certification-content h2,
+    .cards-section h2, .section-coverage h2,
+    .contact-header h2 {
+        font-size: 28px;
+    }
+
     /* About Us / Content Wrapper */
     .content-wrapper {
         flex-direction: column;
@@ -1380,7 +1391,7 @@ img {
     }
     .content-wrapper h2 {
         margin: 0 auto;
-        font-size: 24px;
+        font-size: 28px;
     }
     .content-wrapper p { font-size: 17px; }
 
@@ -1401,8 +1412,8 @@ img {
 
     /* Certifications */
     .certifications-section { padding: 30px 20px; }
-    .certification-content h2 { font-size: 24px; margin: 0 auto; }
-    .certification-content p { width: 100%; font-size: 17px; }
+    .certification-content h2 { font-size: 28px; margin: 0 auto; }
+    .certification-content p { width: 80%; font-size: 17px; }
     
     .certifications-seal-x3 {
         grid-template-columns: repeat(3, auto);
@@ -1421,7 +1432,7 @@ img {
     }
     .column-text, 
     .column-map { width: 90%; }
-    .column-text h2 { font-size: 24px; margin: 0; }
+    .column-text h2 { font-size: 28px; margin: 0; }
     .column-text p { font-size: 17px; }
     .column-map { height: 300px; }
 
@@ -1489,6 +1500,21 @@ img {
         font-size: 30px;
     }
 
+    .cards-container {
+        padding: 20px 5px;
+}
+
+    .cards-section h2 {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .text-container h2, .certification-content h2,
+    .cards-section h2, .section-coverage h2,
+    .contact-header h2 {
+        font-size: 28px;
+    }
+
     /* CTA */
     .cta-box {
         flex-direction: column;
@@ -1525,6 +1551,19 @@ img {
         font-size: 30px;
     }
     .btn-solicitar { font-size: 18px; }
+
+    .cards-container { padding: 20px 5px; }
+
+    .cards-section h2 {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .text-container h2, .certification-content h2,
+    .cards-section h2, .section-coverage h2,
+    .contact-header h2 {
+        font-size: 28px;
+    }
 
     /* Layout Adjustments */
     .content-wrapper { padding: 20px 0; }
