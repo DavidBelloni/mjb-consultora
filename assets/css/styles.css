@@ -28,7 +28,6 @@ FUENTES Y VARIABLES GLOBALES
     font-style: normal;
 }
 
-/* Variables de Color (Optimización: Agregadas para evitar repetición de colores) */
 :root {
     --color-primary-dark: #081E66; /* Azul oscuro (para CTA, líneas) */
     --color-primary-medium: #3D51E4; /* Azul medio (para enlaces) */
@@ -61,7 +60,7 @@ body {
 }
 /*Fondo de la home*/
 .home-page{
-    background-color: #fff;
+    background-color: var(--color-background-white);
 }
 /*Anula el fondo con gradientes y blur en la página de inicio*/
 .home-page::before {
@@ -69,7 +68,7 @@ body {
 }
 
 /* Contenedor central (Utilidad) */
-.container, .container-body {
+.container, .container-body, .container-services {
     max-width: var(--max-width-container);
     margin: 0 auto;
     padding: 0 20px;
@@ -137,7 +136,7 @@ body::before {
 SECCIÓN HERO
 ========================================================================== */
 
-.hero-section {
+.hero-home {
     position: relative; 
     width: 100%;
     height: 70vh; 
@@ -517,7 +516,7 @@ CERTIFICATIONS ISO - HOME
     position: relative;
 }
 
-.certifications-grid-x3 {
+.certifications-seal-x3 {
     display: grid;
     grid-template-columns: repeat(3, auto);
     gap: 100px;
@@ -530,7 +529,7 @@ CERTIFICATIONS ISO - HOME
     justify-content: center;
 }
 
-.certifications-grid-x2 {
+.certifications-seal-x2 {
     display: grid;
     grid-template-columns: repeat(2, auto);
     gap: 100px;
@@ -1360,10 +1359,10 @@ SECCIÓN HERO (Slider)
 }
 
 /* ==========================================================================
-11. MEDIA QUERIES
+MEDIA QUERIES
 ========================================================================== */
 
-/* Tablets grandes y notebooks (<= 1024px) */
+/* Desktops (<= 1024px) */
 @media (max-width: 1024px) {
     .main-header {
         padding: 20px 40px; 
@@ -1397,8 +1396,171 @@ SECCIÓN HERO (Slider)
     }
 }
 
-/* Tablets y móviles grandes (<= 768px) */
+/* Notebooks y Desktops (<= 768px) */
+@media (max-width: 992px) {
+    .content-wrapper {
+        flex-direction: column; /* Apila las columnas */
+    }
+
+    .text-container,
+    .image-container {
+        width: 100%; /* Ocupan todo el ancho */
+        padding: 20px;
+    }
+    
+    .text-container::before {
+        /* Desactiva el efecto curvo complejo en móvil para simplificar */
+        clip-path: none; 
+        border-radius: 0;
+    }
+    
+    .hero-content-home h1{
+        font-size: 32px;
+        text-align: center;
+        padding-top: 10%;
+        width: 55%;
+    }
+
+    .hero-content-home{
+        margin: 0 auto;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
+
+    .cards-section {
+        padding: 0 0;
+        padding-bottom: 30px;
+    }
+
+    .cards-section h2{
+        font-size: 24px;
+    }
+
+    .cards-section h3{
+        font-size: 20px;
+    }
+
+    .cards-section p{
+        font-size: 17px;
+        margin: 0 auto;
+    }
+
+    .content-wrapper {
+        flex-direction: column;
+        gap: 0px;
+        padding: 30px 10px 30px 10px;
+    }
+
+    .content-wrapper h2{
+        font-size: 24px;
+        margin: 0 auto;
+    }
+
+    .content-wrapper p{
+        font-size: 17px;
+    }
+
+    .about-us-section > .content-wrapper:last-of-type {
+        flex-direction: column-reverse; /* Invierte el orden de apilamiento */
+    }
+
+    /* Resetear flex en los hijos para que ocupen todo el ancho disponible */
+    .content-wrapper .image-container,
+    .content-wrapper .text-container {
+        flex: unset;
+        width: 100%;
+    }
+
+    .commitment-block {
+        margin: 15px auto;
+        width: 65%;
+        justify-content: center;
+    }
+
+    .text-container {
+        padding: 0 20px;
+    }
+
+    .image-container img{
+        margin: 0 auto;
+        width: 50%;
+    }
+
+    .certifications-section {
+        padding: 30px 20px;
+    }
+
+    .certification-content h2 {
+        font-size: 24px;
+        margin: 0 auto;
+    }
+
+    .certification-content p {
+        font-size: 17px;
+        width: 100%;
+    }
+
+    .certifications-seal-x3 {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        gap: 30px;
+    }
+
+    .certifications-seal-x2 {
+        display: grid;
+        gap: 30px;
+        grid-template-columns: repeat(2, auto);
+    }   
+
+/*-----------*/
+
+    .section-coverage {
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+        padding: 40px 0;
+    }
+
+    .column-text { 
+        width: 90%;
+    }
+
+    .column-text h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0px;
+    }
+
+    .column-text p {
+        font-size: 17px;
+        font-weight: 400;
+    }
+
+    .column-map {
+        width: 90%; 
+        height: 300px;
+        border-radius: 15px;
+        overflow: hidden;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contact-card {
+        background-position: left;
+        width: 95%;
+    }
+}
+
+/* Tablets y Moviles grandes (<= 768px) */
 @media (max-width: 768px) {
+
+    .hero-content-home h1{
+        font-size: 30px;
+        text-align: center;
+        padding-top: 20%;
+        width: 60%;
+    }
 
     /* HEADER (Aplica lógica de menú móvil) */
     .main-header {
@@ -1507,16 +1669,20 @@ SECCIÓN HERO (Slider)
     }
 }
 
-/* Móviles (<= 600px) */
+/* Moviles (<= 600px) */
 @media (max-width: 600px) {
 
 /* Home-Page */    
 
     .hero-content-home h1{
-        font-size: 32px;
+        font-size: 30px;
         text-align: center;
         padding-top: 20%;
-        width: 75%;
+        width: 90%;
+    }
+
+    .btn-solicitar {
+        font-size: 18px;
     }
 
     .hero-content-home{
@@ -1547,7 +1713,7 @@ SECCIÓN HERO (Slider)
     .content-wrapper {
         flex-direction: column;
         gap: 0px;
-        padding: 20px 0 20px 0;
+        padding: 20px 0;
     }
 
     .content-wrapper h2{
@@ -1568,6 +1734,7 @@ SECCIÓN HERO (Slider)
 
     .commitment-block {
         margin: 15px auto;
+        width: 95%;
     }
 
     .text-container {
@@ -1593,19 +1760,17 @@ SECCIÓN HERO (Slider)
         width: 100%;
     }
 
-    .certifications-grid-x3 {
+    .certifications-seal-x3 {
         display: grid;
         grid-template-columns: repeat(1, auto);
         gap: 50px;
     }
 
-    .certifications-grid-x2 {
+    .certifications-seal-x2 {
         display: grid;
         gap: 50px;
         grid-template-columns: repeat(1, auto);
     }   
-
-/*-----------*/
 
     .section-coverage {
         display: flex;
@@ -1671,7 +1836,6 @@ SECCIÓN HERO (Slider)
         font-size: 17px;
     }
 
-    /* CTA */
     .cta-content h2{
         font-size: 18px;
     }
@@ -1680,7 +1844,6 @@ SECCIÓN HERO (Slider)
         font-size: 16px;
     }
     
-    /* LISTAS */
     .check-list li {
         font-size: 16px;
         gap: 10px;
@@ -1691,170 +1854,8 @@ SECCIÓN HERO (Slider)
         padding: 2px;
     }
     
-    /* ISO */
     .iso-certifications{
         width: 100%;
     }
 
-    .certificados-grid-x3 .certificados-grid-x2 {
-        grid-template-columns: 1fr; 
-    }
 }
-
-/* ------------------ Responsive (Ajuste para móviles) ------------------ */
-@media (max-width: 992px) {
-    .content-wrapper {
-        flex-direction: column; /* Apila las columnas */
-    }
-
-    .text-container,
-    .image-container {
-        width: 100%; /* Ocupan todo el ancho */
-        padding: 20px;
-    }
-    
-    .text-container::before {
-        /* Desactiva el efecto curvo complejo en móvil para simplificar */
-        clip-path: none; 
-        border-radius: 0;
-    }
-    
-    
-    .hero-content-home h1{
-        font-size: 32px;
-        text-align: center;
-        padding-top: 10%;
-        width: 55%;
-    }
-
-    .hero-content-home{
-        margin: 0 auto;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-    }
-
-    .cards-section {
-        padding: 0 0;
-        padding-bottom: 30px;
-    }
-
-    .cards-section h2{
-        font-size: 24px;
-    }
-
-    .cards-section h3{
-        font-size: 20px;
-    }
-
-    .cards-section p{
-        font-size: 17px;
-        margin: 0 auto;
-    }
-
-    .content-wrapper {
-        flex-direction: column;
-        gap: 0px;
-        padding: 30px 10px 30px 10px;
-    }
-
-    .content-wrapper h2{
-        font-size: 24px;
-        margin: 0 auto;
-    }
-
-    .content-wrapper p{
-        font-size: 17px;
-    }
-
-    .about-us-section > .content-wrapper:last-of-type {
-        flex-direction: column-reverse; /* Invierte el orden de apilamiento */
-    }
-
-    /* Resetear flex en los hijos para que ocupen todo el ancho disponible */
-    .content-wrapper .image-container,
-    .content-wrapper .text-container {
-        flex: unset;
-        width: 100%;
-    }
-
-    .commitment-block {
-        margin: 15px auto;
-        width: 65%;
-        justify-content: center;
-    }
-
-    .text-container {
-        padding: 0 20px;
-    }
-
-    .image-container img{
-        margin: 0 auto;
-        width: 50%;
-    }
-
-    .certifications-section {
-        padding: 30px 20px;
-    }
-
-    .certification-content h2 {
-        font-size: 24px;
-        margin: 0 auto;
-    }
-
-    .certification-content p {
-        font-size: 17px;
-        width: 100%;
-    }
-
-    .certifications-grid-x3 {
-        display: grid;
-        grid-template-columns: repeat(3, auto);
-        gap: 30px;
-    }
-
-    .certifications-grid-x2 {
-        display: grid;
-        gap: 30px;
-        grid-template-columns: repeat(2, auto);
-    }   
-
-/*-----------*/
-
-    .section-coverage {
-        display: flex;
-        flex-direction: column;
-        gap: 35px;
-        padding: 40px 0;
-    }
-
-    .column-text { 
-        width: 90%;
-    }
-
-    .column-text h2 {
-        font-size: 24px;
-        font-weight: 600;
-        margin: 0px;
-    }
-
-    .column-text p {
-        font-size: 17px;
-        font-weight: 400;
-    }
-
-    .column-map {
-        width: 90%; 
-        height: 300px;
-        border-radius: 15px;
-        overflow: hidden;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .contact-card {
-        background-position: left;
-        width: 95%;
-    }
-}
-
