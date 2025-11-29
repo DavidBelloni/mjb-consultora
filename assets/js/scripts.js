@@ -1,97 +1,155 @@
-// BLOQUE 1: Lógica del Slider
-const slides = document.querySelectorAll('.hero-slide');
-let current = 0;
+/**
+ * scripts.js
+ * Lógica principal del sitio web.
+ * Estructurada en módulos para facilitar mantenimiento y evitar errores.
+ */
 
-function showSlide(index) {
-    slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-    });
-}
-
-function nextSlide() {
-    current = (current + 1) % slides.length;
-    showSlide(current);
-}
-
-showSlide(current);
-setInterval(nextSlide, 6000); // cambia cada 6 segundos
-
-// ---
-
-// BLOQUE 2: Lógica de la Animación al Hacer Scroll (Intersection Observer)
-const elementosAObservar = document.querySelectorAll('.animacion-scroll');
-
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            // Si el elemento es visible, ¡añade la clase que lo activa!
-            entry.target.classList.add('is-visible');
-            // Dejamos de observar para no ejecutarlo más
-            observer.unobserve(entry.target); 
-        }
-    });
-}, {
-    threshold: 0.1 
+document.addEventListener('DOMContentLoaded', () => {
+    initHeroSlider();
+    initScrollAnimations();
+    initMobileMenu();
+    initContactForm();
 });
 
-elementosAObservar.forEach(elemento => {
-    observer.observe(elemento);
-});
+/* ==========================================================================
+1. LÓGICA DEL SLIDER (HERO)
+   ========================================================================== */
+function initHeroSlider() {
+    const slides = document.querySelectorAll('.hero-slide');
+    
+    // Si no hay slides en esta página, salimos para evitar errores.
+    if (slides.length === 0) return;
 
-// BLOQUE 3: Lógica del Menú de Navegación Responsive
+    let current = 0;
+    const intervalTime = 6000;
 
-document.addEventListener('DOMContentLoaded', function() {
+    function nextSlide() {
+        // Quitamos la clase al slide actual
+        slides[current].classList.remove('active');
+        // Calculamos el siguiente índice (loop infinito)
+        current = (current + 1) % slides.length;
+        // Activamos el nuevo slide
+        slides[current].classList.add('active');
+    }
+
+    // Inicializar el primer slide (por seguridad, aunque esté en HTML)
+    slides[0].classList.add('active');
+
+    // Iniciar rotación automática
+    setInterval(nextSlide, intervalTime);
+}
+
+/* ==========================================================================
+2. ANIMACIÓN SCROLL (INTERSECTION OBSERVER)
+   ========================================================================== */
+function initScrollAnimations() {
+    const elementos = document.querySelectorAll('.animacion-scroll');
+
+    // Si no hay elementos animados, no instanciamos el observador
+    if (elementos.length === 0) return;
+
+    const observerOptions = {
+        threshold: 0.1, // Se activa cuando el 10% del elemento es visible
+        rootMargin: "0px 0px -50px 0px" // Margen inferior para activar un poco antes
+    };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                obs.unobserve(entry.target); // Dejar de observar tras la animación
+            }
+        });
+    }, observerOptions);
+
+    elementos.forEach(el => observer.observe(el));
+}
+
+/* ==========================================================================
+3. MENÚ DE NAVEGACIÓN RESPONSIVE
+   ========================================================================== */
+function initMobileMenu() {
     const menuToggle = document.querySelector('.menu-toggle');
     const navMenu = document.querySelector('.main-nav');
 
-    if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('is-open'); // Agrega o quita una clase
+    if (!menuToggle || !navMenu) return;
+
+    // Abrir / Cerrar menú
+    menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('is-open');
+        // Accesibilidad: indicar al navegador si está expandido
+        const isExpanded = navMenu.classList.contains('is-open');
+        menuToggle.setAttribute('aria-expanded', isExpanded);
+    });
+
+    // UX: Cerrar el menú automáticamente al hacer clic en un enlace
+    const menuLinks = navMenu.querySelectorAll('a');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navMenu.classList.contains('is-open')) {
+                navMenu.classList.remove('is-open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            }
         });
-    }
-});
+    });
+}
 
-document.getElementById('contact-form').addEventListener('submit', async function(event) {
-    // 1. Prevenir el envío tradicional (para evitar la recarga de la página)
-    event.preventDefault(); 
-
-    const form = event.target;
-    const formData = new FormData(form);
+/* ==========================================================================
+4. FORMULARIO DE CONTACTO
+   ========================================================================== */
+function initContactForm() {
+    const form = document.getElementById('contact-form');
     
-    // Convertir todos los datos del formulario (incluyendo name, email, phone, message) a un objeto JSON
-    const data = Object.fromEntries(formData.entries()); 
+    // Si no estamos en la página de contacto, no hacemos nada
+    if (!form) return;
 
     const messageElement = document.getElementById('form-message');
-    
-    // Mostrar mensaje de envío y restablecer el color
-    messageElement.textContent = 'Enviando...';
-    messageElement.style.color = 'black';
 
-    try {
-        // 2. Enviar los datos a la función serverless de Vercel
-        // La URL debe coincidir con la ubicación de tu función (api/send-email.js)
-        const response = await fetch('/api/send-email', { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data), // Envía los datos como JSON
-        });
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-        const result = await response.json();
-
-        // 3. Manejar la respuesta del servidor
-        if (response.ok) {
-            messageElement.textContent = '✅ ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.';
-            messageElement.style.color = 'green';
-            form.reset(); // Limpia el formulario después del éxito
-        } else {
-            // Manejar errores devueltos por la función de Vercel/Resend
-            messageElement.textContent = `❌ Error al enviar: ${result.error || 'Algo salió mal en el servidor.'}`;
-            messageElement.style.color = 'red';
+        // Feedback visual inmediato
+        if (messageElement) {
+            messageElement.textContent = 'Enviando mensaje...';
+            messageElement.style.color = 'var(--color-text-base, #333)';
         }
-    } catch (error) {
-        // Manejar errores de conexión de red
-        console.error('Error de red:', error);
-        messageElement.textContent = '❌ Error de conexión al servidor. Revisa tu red.';
-        messageElement.style.color = 'red';
-    }
-});
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true; // Evitar doble envío
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('/api/send-email', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Éxito
+                if (messageElement) {
+                    messageElement.textContent = '✅ ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.';
+                    messageElement.style.color = 'green';
+                }
+                form.reset();
+            } else {
+                // Error del servidor
+                throw new Error(result.error || 'Error desconocido del servidor');
+            }
+        } catch (error) {
+            // Error de red o catch del throw anterior
+            console.error('Error al enviar:', error);
+            if (messageElement) {
+                messageElement.textContent = '❌ Hubo un problema al enviar. Por favor intenta más tarde.';
+                messageElement.style.color = 'red';
+            }
+        } finally {
+            // Reactivar botón siempre, ocurra error o éxito
+            if (submitBtn) submitBtn.disabled = false;
+        }
+    });
+}
