@@ -106,6 +106,38 @@ img {
     height: auto;
 }
 
+/* Boton flotante de Whatsapp */
+.whatsapp-float {
+    position: fixed; 
+    bottom: 40px; 
+    right: 10px; 
+    z-index: 1000; 
+    /* Configura el tamaño del icono y el color de fondo */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #25D366;
+    /* Centrar el SVG dentro del círculo */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+    transition: all 0.3s ease-in-out; 
+    transform-origin: center;
+}
+
+.whatsapp-float svg {
+    width: 30px; 
+    height: 30px;
+    color: white;
+}
+
+.whatsapp-float:hover {
+    background-color: #1DA851; 
+    transform: scale(1.1); 
+}
+
 /* --- Modificadores de Página --- */
 
 /* Home Page: Anula el fondo decorativo global */
@@ -766,7 +798,6 @@ img {
 }
 
 .certifications-seal-x3 { grid-template-columns: repeat(3, auto); }
-.certifications-seal-x2 { grid-template-columns: repeat(2, auto); }
 
 .certifications-item {
     padding: 10px;
@@ -802,10 +833,17 @@ img {
     text-shadow: var(--shadow-text-md);
 }
 
-.iso-grid {
+.iso-grid-1 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 50%;
+    margin: auto;
+}
+
+.iso-grid-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    width: 50%;
+    width: 35%;
     margin: auto;
 }
 
@@ -826,10 +864,10 @@ img {
 
 .iso-card span {
     display: block;
-    max-width: 280px;
     line-height: 1.3;
     word-wrap: break-word;
     text-align: center;
+    justify-content: center;
     text-shadow: var(--shadow-text-md);
 }
 
@@ -1419,10 +1457,6 @@ img {
         grid-template-columns: repeat(3, auto);
         gap: 30px;
     }
-    .certifications-seal-x2 {
-        grid-template-columns: repeat(2, auto);
-        gap: 30px;
-    }
 
     /* Maps & Coverage */
     .section-coverage {
@@ -1523,7 +1557,7 @@ img {
     .cta-image, .cta-content { flex: 1; }
 
     /* ISO Grid */
-    .iso-grid { grid-template-columns: 1fr; }
+    .iso-grid-1, .iso-grid-2 { grid-template-columns: 1fr; }
 
     /* Footer Stack */
     .footer-grid {
