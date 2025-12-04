@@ -283,7 +283,7 @@
             <h2>Contacto</h2>
         </div>
 
-        <form class="contact-form" method="POST" action="/api/contact">
+        <form class="contact-form" id="contact-form">
             <div class="form-group">
                 <label for="nombre">Nombre</label>
                 <input type="text" id="nombre" name="nombre" required>
@@ -306,6 +306,8 @@
             
             <button type="submit" class="submit-button">Enviar</button>
         </form>
+
+        <div id="form-feedback"></div>
     </section>
 
     <script src="assets/js/scripts.js"></script>
