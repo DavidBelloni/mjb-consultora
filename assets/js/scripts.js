@@ -149,7 +149,6 @@ function initReviewsSlider() {
 
     let currentIndex = 0;
     let cardWidth = 0;
-    let sliderPadding = 0;
 
     // Cargar reseñas desde JSON
     fetch('assets/data/reseñas.json')
@@ -161,27 +160,26 @@ function initReviewsSlider() {
             stars += `<img src="assets/img/icons/${i <= r.rating ? 'star-f' : 'star-e'}.svg" alt="star">`;
           }
 
-          container.innerHTML += `
-            <div class="review-card">
-              <div class="review-meta">
-                <div class="review-name">${r.name}</div>
-                <div class="review-date">${r.date}</div>
-              </div>
-              <div class="review-stars">${stars}</div>
-              <p class="review-text">${r.text}</p>
-            </div>
-          `;
-        });
+          // Inserta cada card al final del contenedor
+      container.insertAdjacentHTML('beforeend', `
+        <div class="review-card">
+          <div class="review-icon">
+            <img src="assets/img/icons/google.svg" alt="Google">
+          </div>
+          <div class="review-meta">
+            <div class="review-name">${r.name}</div>
+            <div class="review-date">${r.date}</div>
+          </div>
+          <div class="review-stars">${stars}</div>
+          <p class="review-text">${r.text}</p>
+        </div>
+      `);
+    });
 
-        // calcular ancho real de tarjeta y padding del slider
+        // calcular ancho de tarjeta (ocupa todo el slider)
         const firstCard = container.querySelector('.review-card');
         if (firstCard) {
-          const style = window.getComputedStyle(firstCard);
-          const gap = parseInt(style.marginRight) || 24; // gap ≈ 24px
-          cardWidth = firstCard.offsetWidth + gap;
-
-          const sliderStyle = window.getComputedStyle(slider);
-          sliderPadding = parseInt(sliderStyle.paddingLeft) || 0;
+          cardWidth = firstCard.offsetWidth;
         }
       });
 
@@ -192,12 +190,12 @@ function initReviewsSlider() {
 
       currentIndex = index;
       slider.scrollTo({
-        left: sliderPadding + currentIndex * cardWidth,
+        left: currentIndex * cardWidth,
         behavior: 'smooth'
       });
     }
 
-    // auto-scroll
+    // auto-scroll cada 13 segundos
     function autoScroll() {
       const cards = document.querySelectorAll('.review-card');
       if (cards.length === 0) return;
@@ -205,7 +203,7 @@ function initReviewsSlider() {
       currentIndex = (currentIndex + 1) % cards.length;
       goToCard(currentIndex);
     }
-    setInterval(autoScroll, 4000);
+    setInterval(autoScroll, 13000);
 
     // botones manuales
     if (prevBtn) {
