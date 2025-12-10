@@ -149,6 +149,7 @@ function initReviewsSlider() {
 
     let currentIndex = 0;
     let cardWidth = 0;
+    let autoScrollInterval;
 
     // Cargar reseñas desde JSON
     fetch('assets/data/reseñas.json')
@@ -161,26 +162,29 @@ function initReviewsSlider() {
           }
 
           // Inserta cada card al final del contenedor
-      container.insertAdjacentHTML('beforeend', `
-        <div class="review-card">
-          <div class="review-icon">
-            <img src="assets/img/icons/google.svg" alt="Google">
-          </div>
-          <div class="review-meta">
-            <div class="review-name">${r.name}</div>
-            <div class="review-date">${r.date}</div>
-          </div>
-          <div class="review-stars">${stars}</div>
-          <p class="review-text">${r.text}</p>
-        </div>
-      `);
-    });
+          container.insertAdjacentHTML('beforeend', `
+            <div class="review-card">
+              <div class="review-icon">
+                <img src="assets/img/icons/google.svg" alt="Google">
+              </div>
+              <div class="review-meta">
+                <div class="review-name">${r.name}</div>
+                <div class="review-date">${r.date}</div>
+              </div>
+              <div class="review-stars">${stars}</div>
+              <p class="review-text">${r.text}</p>
+            </div>
+          `);
+        });
 
         // calcular ancho de tarjeta (ocupa todo el slider)
         const firstCard = container.querySelector('.review-card');
         if (firstCard) {
           cardWidth = firstCard.offsetWidth;
         }
+
+        // iniciar auto-scroll
+        startAutoScroll();
       });
 
     // función para ir a una tarjeta
@@ -195,7 +199,7 @@ function initReviewsSlider() {
       });
     }
 
-    // auto-scroll cada 13 segundos
+    // auto-scroll
     function autoScroll() {
       const cards = document.querySelectorAll('.review-card');
       if (cards.length === 0) return;
@@ -203,9 +207,20 @@ function initReviewsSlider() {
       currentIndex = (currentIndex + 1) % cards.length;
       goToCard(currentIndex);
     }
-    setInterval(autoScroll, 13000);
 
-    // botones manuales
+    function startAutoScroll() {
+      autoScrollInterval = setInterval(autoScroll, 10000);
+    }
+
+    function stopAutoScroll() {
+      clearInterval(autoScrollInterval);
+    }
+
+    // detener al hacer hover
+    slider.addEventListener('mouseenter', stopAutoScroll);
+    slider.addEventListener('mouseleave', startAutoScroll);
+
+    // botones manuales (solo visibles en desktop)
     if (prevBtn) {
       prevBtn.addEventListener('click', () => {
         currentIndex = Math.max(currentIndex - 1, 0);
@@ -221,3 +236,4 @@ function initReviewsSlider() {
       });
     }
 }
+

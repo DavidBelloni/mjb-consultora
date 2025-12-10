@@ -594,9 +594,6 @@ img {
   transition: box-shadow 0.3s ease-in-out;
 }
 
-.commitment-block:hover {
-  box-shadow: rgba(8, 61, 103) 0px 5px 20px;
-}
 
 .commitment-block p {
   margin: 0;
@@ -1395,19 +1392,28 @@ img {
 }
 
 /* Clases de Estado para JS */
+
 .animacion-scroll {
   opacity: 0;
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
 .fade-up {
-  transform: translateY(60px);
+  transform: translateY(40px);
 }
 .fade-in {
-  transform: translateY(25px);
+  transform: translateY(-40px);
 }
 .zoom-in {
   transform: scale(0.8);
+}
+
+.fade-in-right {
+  transform: translateX(-80px);
+}
+
+.fade-in-left {
+  transform: translateX(80px);
 }
 
 .is-visible {
