@@ -856,7 +856,7 @@ img {
   gap: 20px;
   grid-template-columns: repeat(2, 1fr);
   width: 35%;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .iso-card {
@@ -1761,10 +1761,10 @@ img {
   }
   .certification-content h2 {
     font-size: 28px;
-    margin: 0 auto;
+    width: 100%;
   }
   .certification-content p {
-    width: 80%;
+    width: 100%;
     font-size: 17px;
   }
 
@@ -1898,6 +1898,7 @@ img {
   .iso-grid-1,
   .iso-grid-2 {
     grid-template-columns: 1fr;
+    width: 100%;
   }
 
   /*Reviews section*/
@@ -1966,6 +1967,13 @@ img {
   }
   .commitment-block {
     width: 95%;
+  }
+
+    /* ISO Grid */
+  .iso-grid-1,
+  .iso-grid-2 {
+    grid-template-columns: 1fr;
+    width: 100%;
   }
 
   /* Grids to Single Column */
