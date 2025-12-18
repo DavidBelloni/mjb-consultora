@@ -8,25 +8,28 @@
   src: url("../fonts/Poppins-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  
+  font-display: swap;
 }
 @font-face {
   font-family: "Poppins Local";
   src: url("../fonts/Poppins-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: "Poppins Local";
   src: url("../fonts/Poppins-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 @font-face {
   font-family: "Poppins Local";
   src: url("../fonts/Poppins-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 /* --- Variables Globales (:root) --- */
@@ -79,7 +82,7 @@ body {
   position: relative;
   margin: 0 auto;
   background-color: var(--color-bg-white);
-  font-family: "Poppins Local", sans-serif;
+  font-family: "Poppins Local", "Segoe UI", "Helvetica Neue", sans-serif;
   color: var(--color-text-base);
 }
 
@@ -1894,6 +1897,10 @@ img {
     flex: 1;
   }
 
+  .list-porque-elegirnos {
+  padding-right: 10px;
+}
+
   /* ISO Grid */
   .iso-grid-1,
   .iso-grid-2 {
@@ -1968,6 +1975,10 @@ img {
   .commitment-block {
     width: 95%;
   }
+
+  .list-porque-elegirnos {
+  padding-right: 10px;
+}
 
     /* ISO Grid */
   .iso-grid-1,
