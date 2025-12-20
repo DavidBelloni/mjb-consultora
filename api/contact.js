@@ -1,17 +1,41 @@
 // api/contact.js
 
 import { Resend } from 'resend';
+import fetch from 'node-fetch'; // para verificar reCAPTCHA
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Función para validar el token de reCAPTCHA con Google
+async function verifyCaptcha(token) {
+  const secret = process.env.RECAPTCHA_SECRET_KEY;
+  const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `secret=${secret}&response=${token}`
+  });
+  return response.json();
+}
+
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const { nombre, email, telefono, mensaje } = req.body;
+    const { nombre, email, telefono, mensaje, website, token } = req.body;
+
+    // Honeypot: si el campo oculto tiene contenido → spam
+    if (website && website.trim() !== "") {
+      return res.status(400).json({ error: "Detección de spam (honeypot)" });
+    }
+
+    // Verificación reCAPTCHA
+    const captcha = await verifyCaptcha(token);
+    if (!captcha.success) {
+      return res.status(400).json({ error: "Captcha inválido" });
+    }
 
     try {
+      // Envío del correo con Resend
       await resend.emails.send({
-        from: 'contactform@mjbconsultora.com.ar', 
-        to: 'info@mjbconsultora.com.ar', 
+        from: 'contactform@mjbconsultora.com.ar',
+        to: 'info@mjbconsultora.com.ar',
         subject: `Nuevo mensaje de ${nombre}`,
         html: `
           <h2>Nuevo mensaje desde el formulario de contacto</h2>
@@ -31,3 +55,4 @@ export default async function handler(req, res) {
     res.status(405).json({ error: 'Método no permitido' });
   }
 }
+

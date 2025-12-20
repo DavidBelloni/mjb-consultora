@@ -8,13 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeroSlider();
   initScrollAnimations();
   initMobileMenu();
-  initContactForm();
   initReviewsSlider(); // Slider de reseñas
+  // Ya no llamamos initContactForm porque el flujo lo maneja reCAPTCHA con onSubmit()
 });
 
 /* ==========================================================================
 1. LÓGICA DEL SLIDER (HERO)
-   ========================================================================== */
+========================================================================== */
 function initHeroSlider() {
   const slides = document.querySelectorAll(".hero-slide");
   if (slides.length === 0) return;
@@ -34,7 +34,7 @@ function initHeroSlider() {
 
 /* ==========================================================================
 2. ANIMACIÓN SCROLL (INTERSECTION OBSERVER)
-   ========================================================================== */
+========================================================================== */
 function initScrollAnimations() {
   const elementos = document.querySelectorAll(".animacion-scroll");
   if (elementos.length === 0) return;
@@ -58,7 +58,7 @@ function initScrollAnimations() {
 
 /* ==========================================================================
 3. MENÚ DE NAVEGACIÓN RESPONSIVE
-   ========================================================================== */
+========================================================================== */
 function initMobileMenu() {
   const menuToggle = document.querySelector(".menu-toggle");
   const navMenu = document.querySelector(".main-nav");
@@ -82,87 +82,88 @@ function initMobileMenu() {
 }
 
 /* ==========================================================================
-4. FORMULARIO DE CONTACTO
-   ========================================================================== */
-function initContactForm() {
+4. FORMULARIO DE CONTACTO (con reCAPTCHA v2 invisible + honeypot)
+========================================================================== */
+function onSubmit(token) {
   const form = document.getElementById("contact-form");
   if (!form) return;
 
-  const messageElement = document.getElementById("form-message");
+  const messageElement = document.getElementById("form-feedback");
+  const submitBtn = form.querySelector("button[type='submit']");
 
-  form.addEventListener("submit", async function (event) {
-    event.preventDefault();
+  // Estado inicial
+  if (messageElement) {
+    messageElement.textContent = "Enviando mensaje...";
+    messageElement.className = "sending";
+  }
+  if (submitBtn) submitBtn.disabled = true;
 
-    if (messageElement) {
-      messageElement.textContent = "Enviando mensaje...";
-      messageElement.style.color = "var(--color-text-base, #333)";
-    }
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
 
-    const submitBtn = form.querySelector('button[type="submit"]');
-    if (submitBtn) submitBtn.disabled = true;
+  // Adjuntamos el token de reCAPTCHA
+  data.token = token;
 
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
+  fetch("/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+    .then((response) => response.json().then((result) => ({ response, result })))
+    .then(({ response, result }) => {
       if (response.ok) {
         if (messageElement) {
           messageElement.textContent =
             "✅ ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.";
-          messageElement.style.color = "green";
+          messageElement.className = "success";
         }
         form.reset();
       } else {
         throw new Error(result.error || "Error desconocido del servidor");
       }
-    } catch (error) {
+    })
+    .catch((error) => {
       console.error("Error al enviar:", error);
       if (messageElement) {
         messageElement.textContent =
           "❌ Hubo un problema al enviar. Por favor intenta más tarde.";
-        messageElement.style.color = "red";
+        messageElement.className = "error";
       }
-    } finally {
+    })
+    .finally(() => {
       if (submitBtn) submitBtn.disabled = false;
-    }
-  });
+    });
 }
 
 /* ==========================================================================
 5. SLIDER DE RESEÑAS (DINÁMICO CON JSON)
-   ========================================================================== */
+========================================================================== */
 function initReviewsSlider() {
-    const slider = document.querySelector('.reviews-slider');
-    const container = document.getElementById('reviews-container');
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
+  const slider = document.querySelector(".reviews-slider");
+  const container = document.getElementById("reviews-container");
+  const prevBtn = document.querySelector(".prev");
+  const nextBtn = document.querySelector(".next");
 
-    if (!slider || !container) return;
+  if (!slider || !container) return;
 
-    let currentIndex = 0;
-    let cardWidth = 0;
-    let autoScrollInterval;
+  let currentIndex = 0;
+  let cardWidth = 0;
+  let autoScrollInterval;
 
-    // Cargar reseñas desde JSON
-    fetch('assets/data/reseñas.json')
-      .then(res => res.json())
-      .then(data => {
-        data.forEach(r => {
-          let stars = '';
-          for (let i = 1; i <= 5; i++) {
-            stars += `<img src="assets/img/icons/${i <= r.rating ? 'star-f' : 'star-e'}.svg" alt="star">`;
-          }
+  fetch("assets/data/reseñas.json")
+    .then((res) => res.json())
+    .then((data) => {
+      data.forEach((r) => {
+        let stars = "";
+        for (let i = 1; i <= 5; i++) {
+          stars += `<img src="assets/img/icons/${
+            i <= r.rating ? "star-f" : "star-e"
+          }.svg" alt="star">`;
+        }
 
-          // Inserta cada card al final del contenedor
-          container.insertAdjacentHTML('beforeend', `
+        container.insertAdjacentHTML(
+          "beforeend",
+          `
             <div class="review-card">
               <div class="review-icon">
                 <img src="assets/img/icons/google.svg" alt="Google">
@@ -174,66 +175,60 @@ function initReviewsSlider() {
               <div class="review-stars">${stars}</div>
               <p class="review-text">${r.text}</p>
             </div>
-          `);
-        });
-
-        // calcular ancho de tarjeta (ocupa todo el slider)
-        const firstCard = container.querySelector('.review-card');
-        if (firstCard) {
-          cardWidth = firstCard.offsetWidth;
-        }
-
-        // iniciar auto-scroll
-        startAutoScroll();
+          `
+        );
       });
 
-    // función para ir a una tarjeta
-    function goToCard(index) {
-      const cards = document.querySelectorAll('.review-card');
-      if (cards.length === 0 || cardWidth === 0) return;
+      const firstCard = container.querySelector(".review-card");
+      if (firstCard) {
+        cardWidth = firstCard.offsetWidth;
+      }
 
-      currentIndex = index;
-      slider.scrollTo({
-        left: currentIndex * cardWidth,
-        behavior: 'smooth'
-      });
-    }
+      startAutoScroll();
+    });
 
-    // auto-scroll
-    function autoScroll() {
-      const cards = document.querySelectorAll('.review-card');
-      if (cards.length === 0) return;
+  function goToCard(index) {
+    const cards = document.querySelectorAll(".review-card");
+    if (cards.length === 0 || cardWidth === 0) return;
 
-      currentIndex = (currentIndex + 1) % cards.length;
+    currentIndex = index;
+    slider.scrollTo({
+      left: currentIndex * cardWidth,
+      behavior: "smooth",
+    });
+  }
+
+  function autoScroll() {
+    const cards = document.querySelectorAll(".review-card");
+    if (cards.length === 0) return;
+
+    currentIndex = (currentIndex + 1) % cards.length;
+    goToCard(currentIndex);
+  }
+
+  function startAutoScroll() {
+    autoScrollInterval = setInterval(autoScroll, 10000);
+  }
+
+  function stopAutoScroll() {
+    clearInterval(autoScrollInterval);
+  }
+
+  slider.addEventListener("mouseenter", stopAutoScroll);
+  slider.addEventListener("mouseleave", startAutoScroll);
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      currentIndex = Math.max(currentIndex - 1, 0);
       goToCard(currentIndex);
-    }
+    });
+  }
 
-    function startAutoScroll() {
-      autoScrollInterval = setInterval(autoScroll, 10000);
-    }
-
-    function stopAutoScroll() {
-      clearInterval(autoScrollInterval);
-    }
-
-    // detener al hacer hover
-    slider.addEventListener('mouseenter', stopAutoScroll);
-    slider.addEventListener('mouseleave', startAutoScroll);
-
-    // botones manuales (solo visibles en desktop)
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        currentIndex = Math.max(currentIndex - 1, 0);
-        goToCard(currentIndex);
-      });
-    }
-
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        const cards = document.querySelectorAll('.review-card');
-        currentIndex = Math.min(currentIndex + 1, cards.length - 1);
-        goToCard(currentIndex);
-      });
-    }
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      const cards = document.querySelectorAll(".review-card");
+      currentIndex = Math.min(currentIndex + 1, cards.length - 1);
+      goToCard(currentIndex);
+    });
+  }
 }
-

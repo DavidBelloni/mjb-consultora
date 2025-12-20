@@ -360,7 +360,7 @@
     </section>
 
     <div class="background-contact-form">
-    <section class="contact-card" id="contacto">
+        <section class="contact-card" id="contacto">
 
         <div class="contact-header">
             <h2 class="animacion-scroll fade-up">Contacto</h2>
@@ -371,29 +371,44 @@
                 <label for="nombre">Nombre</label>
                 <input type="text" id="nombre" name="nombre" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="email">Correo electrónico</label>
                 <input type="email" id="email" name="email" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="telefono">Teléfono</label>
                 <input type="tel" id="telefono" name="telefono">
             </div>
-            
+
             <div class="form-group">
                 <label for="mensaje">Tu mensaje</label>
                 <textarea id="mensaje" name="mensaje" rows="8" required></textarea>
             </div>
-            
-            <button type="submit" class="submit-button">Enviar</button>
+
+            <!-- Honeypot oculto -->
+            <div style="display:none;">
+                <label for="website">Website</label>
+                <input type="text" id="website" name="website">
+            </div>
+
+            <!-- Botón con reCAPTCHA v2 invisible -->
+            <button 
+                type="submit" 
+                class="submit-button g-recaptcha"
+                data-sitekey="6LfoPDEsAAAAAH266ARlNd0ktqIpRJbPmTBb4xp_" 
+                data-callback="onSubmit" 
+                data-size="invisible">
+                Enviar
+            </button>
         </form>
 
         <div id="form-feedback"></div>
-        
-    </section>
-    </div> 
+        </section>
+    </div>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <script src="assets/js/scripts.js"></script>
 
