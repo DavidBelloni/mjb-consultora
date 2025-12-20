@@ -85,6 +85,7 @@ function initMobileMenu() {
 4. FORMULARIO DE CONTACTO (con reCAPTCHA v2 invisible + honeypot)
 ========================================================================== */
 function onSubmit(token) {
+  console.log("Token generado por reCAPTCHA:", token);
   const form = document.getElementById("contact-form");
   if (!form) return;
 
