@@ -20,6 +20,8 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { nombre, email, telefono, mensaje, website, token } = req.body;
 
+    console.log("Token recibido en backend:", token);
+    
     // Honeypot: si el campo oculto tiene contenido → spam
     if (website && website.trim() !== "") {
       return res.status(400).json({ error: "Detección de spam (honeypot)" });
