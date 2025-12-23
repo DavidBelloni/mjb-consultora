@@ -1,7 +1,6 @@
 // api/contact.js
 
 import { Resend } from 'resend';
-import fetch from 'node-fetch'; // para verificar reCAPTCHA
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -51,6 +50,7 @@ export default async function handler(req, res) {
 
       res.status(200).json({ success: true });
     } catch (error) {
+      console.error("Error al enviar correo:", error);
       res.status(500).json({ error: error.message });
     }
   } else {
