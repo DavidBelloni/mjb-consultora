@@ -105,7 +105,7 @@ function onSubmit(token) {
   // Adjuntamos el token de reCAPTCHA
   data.token = token;
 
-  fetch("/api/contact", {
+  fetch("https://mjb-consultora-web.vercel.app/api/contact", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
