@@ -17,7 +17,7 @@ async function verifyCaptcha(token) {
 
 export default async function handler(req, res) {
   // Configurar CORS 
-  res.setHeader("Access-Control-Allow-Origin", "https://v2.mjbconsultora.com.ar"); 
+  res.setHeader("Access-Control-Allow-Origin", "https://mjbconsultora.com.ar"); 
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS"); 
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
