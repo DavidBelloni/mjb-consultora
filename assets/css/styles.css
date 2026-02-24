@@ -691,7 +691,7 @@ img {
 .section-content .resumen-hero p {
   margin: 10px auto;
   line-height: 1.7;
-  text-align: center;
+  text-align: left;
 }
 
 /* Listas con Iconos */
